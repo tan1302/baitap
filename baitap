@@ -1,0 +1,184 @@
+package java_nang_cao;
+	import java.awt.BorderLayout;
+	import java.awt.EventQueue;
+	import javax.swing.JFrame;
+	import javax.swing.JPanel;
+	import javax.swing.border.EmptyBorder;
+	import javax.swing.GroupLayout;
+	import javax.swing.GroupLayout.Alignment;
+	import javax.swing.JEditorPane;
+	import javax.swing.JFileChooser;
+	import javax.swing.JButton;
+	import java.awt.event.ActionListener;
+	import java.io.BufferedReader;
+	import java.io.BufferedWriter;
+	import java.io.File;
+	import java.io.FileReader;
+	import java.io.FileWriter;
+	import java.io.PrintStream;
+	import java.awt.event.ActionEvent;
+	import javax.swing.LayoutStyle.ComponentPlacement;
+	import javax.swing.JTree;
+	import javax.swing.JTextArea;
+
+	public class baitap extends JFrame {
+
+		private JPanel contentPane;
+		private JTextArea taContent;
+		public static void main(String[] args) {
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						baitap frame = new baitap();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		public baitap() {
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setBounds(100, 100, 450, 300);
+			contentPane = new JPanel();
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			setContentPane(contentPane);
+			
+			JButton btnOpen = new JButton("Open");
+			btnOpen.addActionListener(new ActionListener() {
+				private PrintStream taContent;
+
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser fc;
+					FileReader fr=null;
+					BufferedReader br=null;
+
+					try {
+						fc = new JFileChooser();
+						int openDialog = fc.showOpenDialog(null);
+						if(openDialog==JFileChooser.APPROVE_OPTION) {
+							String path = fc.getSelectedFile().getAbsolutePath();
+
+							fr = new FileReader(path);
+							br = new BufferedReader(fr);
+							String s;
+							 while ((s = br.readLine()) != null) {
+						            System.out.println(s);
+						         }
+							
+						}
+						br.close();
+						fr.close();
+					} catch (Exception e2) {
+						// TODO: handle exception
+						System.out.println("Error"+e2.getMessage());
+					}
+				}
+			});
+			btnOpen.setBounds(91, 353, 89, 23);
+			contentPane.add(btnOpen);
+			
+			JButton btnSaVe = new JButton("Save as");
+			btnSaVe.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser fc;
+					FileWriter fw =null;
+					BufferedWriter bw=null;
+					try {
+						fc = new JFileChooser();
+						int openDialog = fc.showOpenDialog(null);
+						if(openDialog==JFileChooser.APPROVE_OPTION) {
+							String path = fc.getSelectedFile().getAbsolutePath();
+							fw = new FileWriter(path);
+							bw = new BufferedWriter(fw);
+							bw.write(taContent.getText());
+							System.out.print("Thành Công ");
+							bw.flush();		
+							bw.close();
+							fw.close();
+						}
+					} catch (Exception e2) {
+						// TODO: handle exception
+						System.out.println("Error"+e2.getMessage());
+					}
+				
+				}
+			});
+			
+			JButton btndelete = new JButton("delete");
+			btndelete.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser xoa;
+					File fr=null;
+					try {
+						xoa = new JFileChooser();
+						int openDialog = xoa.showOpenDialog(null);
+						if(openDialog==JFileChooser.APPROVE_OPTION) {
+							String path = xoa.getSelectedFile().getAbsolutePath();
+							fr =new File(path);
+							         if (fr.delete()) {
+							            System.out.println(" xóa thành công "); 
+							         }
+							         else System.out.print(" xóa không thành công ");
+							                 
+						}
+
+					} catch (Exception e2) {
+						// TODO: handle exception
+						System.out.println("Error"+e2.getMessage());
+					}
+					 
+				}
+			});
+			
+			JButton btnNew = new JButton("New");
+			btnNew.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					btnNew.setBounds(50, 320, 89, 23);
+					contentPane.add(btnNew);
+				}
+			});
+			
+			JTree tree = new JTree();
+			
+			taContent = new JTextArea();
+			GroupLayout gl_contentPane = new GroupLayout(contentPane);
+			gl_contentPane.setHorizontalGroup(
+				gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addGap(20)
+								.addComponent(btnOpen)
+								.addGap(36)
+								.addComponent(btnSaVe)
+								.addGap(18)
+								.addComponent(btnNew)
+								.addGap(20)
+								.addComponent(btndelete))
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(tree, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(taContent, GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)))
+						.addContainerGap())
+			);
+			gl_contentPane.setVerticalGroup(
+				gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addComponent(tree, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(taContent, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
+						.addGap(84)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnOpen)
+							.addComponent(btnSaVe)
+							.addComponent(btndelete)
+							.addComponent(btnNew))
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+			);
+			contentPane.setLayout(gl_contentPane);
+			btnSaVe.setBounds(201, 353, 89, 23);
+			contentPane.add(btnSaVe);
+		}
+	}
